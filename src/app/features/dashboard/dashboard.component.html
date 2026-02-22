@@ -1,0 +1,106 @@
+<div class="dashboard-wrapper">
+  <header class="main-header">
+    <div class="user-info">
+      <h1>Panel de Preventa</h1>
+      <p>Bienvenido, <strong>{{ username() }}</strong></p>
+    </div>
+    <button class="btn-primary" (click)="openCreateClientModal()">
+      <span class="icon">+</span> Nuevo Cliente
+    </button>
+  </header>
+
+  <section class="kpi-grid">
+    <div class="card kpi-card">
+      <span class="label">Ventas Hoy</span>
+      <span class="value text-success">${{ totalSales() | number:'1.2-2' }}</span>
+    </div>
+    <div class="card kpi-card">
+      <span class="label">Visitas Pendientes</span>
+      <span class="value text-warning">{{ pendingVisits() }}</span>
+    </div>
+  </section>
+
+  <section class="clients-section card">
+    <div class="section-header">
+      <h2>Mi Ruta de Hoy</h2>
+    </div>
+
+    <div class="client-list">
+      @for (client of clients(); track client.id) {
+        <div class="client-item" (click)="viewOptionsClient(client.id)">
+          <div class="client-data">
+            <span class="client-name">{{ client.name }}</span>
+            <span class="client-address">{{ client.address }}</span>
+          </div>
+          <div class="client-action">
+            <span class="badge" [class.badge-pending]="client.status === 'Pendiente'">
+              {{ client.status }}
+            </span>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+      }
+    </div>
+
+@if (isModalOpen()) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header">
+        <div>
+          <h2>Nuevo Cliente</h2>
+          <p>Completa los datos del comercio</p>
+        </div>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <form [formGroup]="clientForm" (ngSubmit)="saveClient()" class="client-form">
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label for="businessName">Nombre del Negocio</label>
+            <input id="businessName" formControlName="businessName" placeholder="Ej: Almacén 'Lo de Nico'">
+          </div>
+
+          <div class="form-group">
+            <label for="firstName">Nombre del Dueño</label>
+            <input id="firstName" formControlName="firstName" placeholder="Nombre">
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Apellido del Dueño</label>
+            <input id="lastName" formControlName="lastName" placeholder="Apellido">
+          </div>
+
+          <div class="form-group full-width">
+            <label for="address">Dirección Completa</label>
+            <input id="address" formControlName="address" placeholder="Calle, Número y Localidad">
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">Teléfono</label>
+            <input id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="Sin el 0 y sin el 15">
+          </div>
+
+          <div class="form-group">
+            <label for="taxId">CUIT / CUIL (Opcional)</label>
+            <input id="taxId" formControlName="taxId" placeholder="20-XXXXXXXX-X">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-save" [disabled]="clientForm.invalid">
+            Guardar Cliente
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+}
+
+  </section>
+</div>
