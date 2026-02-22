@@ -1,0 +1,12 @@
+<div class="page">
+    <div class="card">
+        <h1>Distribuidora</h1>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <input formControlName="username" placeholder="Username" />
+            <input type="password" formControlName="password" placeholder="Password" />
+            <button type="button" (click)="submit()">Login</button>
+        </form>
+        <a routerLink="/auth/register">Ir a register</a>
+    </div>
+</div>
