@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ClientModel } from '../models/client-model';
-import { Observable } from 'rxjs';
+import { ClientModel, ClientUI, toClientUI } from '../models/client-model';
+import { map, Observable } from 'rxjs';
 import { ClientRequest } from '../models/client-model';
-import { environment } from '../../../../environments/environment.development';
+import { environment } from '../../../environments/environment.development';
 import { UUID } from 'crypto';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Client {
+export class ClientService {
   
   private readonly baseUrl = `${environment.apiBaseUrl}/clients`;
 
@@ -38,6 +38,18 @@ export class Client {
 
   updateClient(id: UUID, payload: ClientRequest): Observable<ClientModel> {
     return this.http.put<ClientModel>(`${this.baseUrl}/${id}`, payload);
+  }
+
+  listAllClientsUI(): Observable<ClientUI[]> {
+    return this.listAllClients().pipe(
+      map(clients => clients.map(toClientUI))
+    );
+  }
+
+  searchByNameUI(name: string): Observable<ClientUI[]> {
+    return this.searchByName(name).pipe(
+      map(clients => clients.map(toClientUI))
+    );
   }
 
 }
