@@ -1,0 +1,123 @@
+<div class="screen">
+  <app-top-bar
+    [title]="cartService.selectedClient()?.businessName || ''"
+    [subtitle]="cartService.selectedClient()?.address || ''"
+    [showBack]="true"
+    [showCart]="true"
+    [cartCount]="cartService.itemCount()"
+    (backClick)="goBack()"
+    (cartClick)="goToSummary()"
+  >
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#9ab4ae" stroke-width="2.5" width="16" height="16">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="text"
+          [ngModel]="searchQuery"
+          (ngModelChange)="onSearch($event)"
+          placeholder="Buscar producto..."
+          aria-label="Buscar producto"
+        />
+      </div>
+    </div>
+  </app-top-bar>
+
+  <div class="content">
+    <!-- Category chips -->
+    <div class="chip-row">
+      <button
+        *ngFor="let cat of categories"
+        class="chip"
+        [class.active]="activeCategory() === cat"
+        (click)="setCategory(cat)"
+      >
+        {{ cat }}
+      </button>
+    </div>
+
+    <!-- Section header -->
+    <div class="section-header">
+      <span class="section-title">Productos</span>
+      <span class="section-count">{{ filteredProducts().length }}</span>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="filteredProducts().length === 0" class="empty-state">
+      <span class="empty-icon">📦</span>
+      <p class="empty-title">Sin productos</p>
+      <p class="empty-sub">Intenta con otra búsqueda o categoría</p>
+    </div>
+
+    <!-- Product cards -->
+    <div
+      *ngFor="let product of filteredProducts(); trackBy: trackById"
+      class="product-card"
+      [class.in-cart]="cartService.isInCart(product.id)"
+    >
+      <div class="product-top">
+        <div class="product-icon">{{ product.icon }}</div>
+
+        <div class="product-details">
+          <p class="product-name">{{ product.name }}</p>
+          <p class="product-sku">{{ product.description }} · {{ product.category }}</p>
+          <p class="product-price">
+            {{ product.price | currency:'USD' }} <span>/ unidad</span>
+          </p>
+        </div>
+
+        <div class="in-cart-badge" *ngIf="cartService.isInCart(product.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#00a844" stroke-width="3" width="12" height="12">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+          En carrito
+        </div>
+      </div>
+
+      <div class="product-actions">
+        <div class="qty-control">
+          <button class="qty-btn" (click)="decrement(product.id)">−</button>
+          <span class="qty-display">{{ qtyMap[product.id] || 0 }}</span>
+          <button class="qty-btn" (click)="increment(product.id)">+</button>
+        </div>
+
+        <button
+          class="add-btn"
+          [class.updated]="cartService.isInCart(product.id)"
+          (click)="addToCart(product)"
+          [attr.aria-label]="cartService.isInCart(product.id) ? 'Actualizar ' + product.name : 'Agregar ' + product.name"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="16" height="16">
+            <path *ngIf="!cartService.isInCart(product.id)" d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line *ngIf="!cartService.isInCart(product.id)" x1="3" y1="6" x2="21" y2="6"/>
+            <path *ngIf="!cartService.isInCart(product.id)" d="M16 10a4 4 0 0 1-8 0"/>
+            <path *ngIf="cartService.isInCart(product.id)" d="M20 6 9 17l-5-5"/>
+          </svg>
+          {{ cartService.isInCart(product.id) ? 'Actualizar' : 'Agregar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating cart bar -->
+  <div class="float-cart" [class.visible]="cartService.hasItems()" (click)="goToSummary()">
+    <div class="float-cart-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="20" height="20">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+    </div>
+    <div class="float-cart-info">
+      <span class="float-items">{{ cartService.itemCount() }} producto{{ cartService.itemCount() !== 1 ? 's' : '' }}</span>
+      <span class="float-total">{{ cartService.total() | currency:'USD' }}</span>
+    </div>
+    <div class="float-cta">
+      Ver orden
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2.5" width="16" height="16">
+        <path d="M5 12h14m-7-7 7 7-7 7"/>
+      </svg>
+    </div>
+  </div>
+</div>

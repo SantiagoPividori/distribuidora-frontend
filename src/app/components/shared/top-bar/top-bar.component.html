@@ -1,0 +1,34 @@
+<div class="top-bar">
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="status-icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 6l5 5 6-7 6 7 5-5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="battery"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v2"/></svg>
+    </div>
+  </div>
+
+  <div class="top-bar-inner">
+    <button *ngIf="showBack" class="back-btn" (click)="backClick.emit()" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+        <path d="M19 12H5m0 0l7 7m-7-7l7-7"/>
+      </svg>
+    </button>
+
+    <div class="bar-text">
+      <h1 class="bar-title">{{ title }}</h1>
+      <p *ngIf="subtitle" class="bar-subtitle">{{ subtitle }}</p>
+    </div>
+
+    <button *ngIf="showCart" class="cart-btn" (click)="cartClick.emit()" aria-label="Ver carrito">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-badge" [class.visible]="cartCount > 0">{{ cartCount }}</span>
+    </button>
+  </div>
+
+  <ng-content></ng-content>
+</div>
