@@ -1,0 +1,109 @@
+<div class="screen">
+  <app-top-bar
+    title="Resumen de Orden"
+    [subtitle]="orderNumber() ? 'Pedido #' + orderNumber() : 'Confirmando...'"
+    [showBack]="true"
+    (backClick)="goBack()"
+  ></app-top-bar>
+
+  <div class="content">
+    <!-- Client -->
+    <div class="section-header">
+      <span class="section-title">Cliente</span>
+    </div>
+
+    <div class="summary-client-card" *ngIf="cartService.selectedClient() as client">
+      <div class="summary-client-avatar">{{ client.initial }}</div>
+      <div class="summary-client-info">
+        <p class="client-name">{{ client.businessName }}</p>
+        <p class="client-addr">📍 {{ client.address }}</p>
+        <span class="client-tag" [class]="'tag-' + client.tag.toLowerCase()">{{ client.tag }}</span>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div class="section-header">
+      <span class="section-title">Productos</span>
+      <span class="section-count">{{ cartService.cartItems().length }} items</span>
+    </div>
+
+    <div *ngFor="let item of cartService.cartItems()" class="order-row">
+      <span class="order-icon">{{ item.product.icon }}</span>
+      <div class="order-info">
+        <p class="order-name">{{ item.product.name }}</p>
+        <p class="order-meta">{{ item.quantity }} u × {{ item.product.price | currency: 'USD' }}</p>
+      </div>
+      <span class="order-subtotal">{{ item.quantity * item.product.price | currency: 'USD' }}</span>
+    </div>
+
+    <!-- Totals -->
+    <div class="total-card">
+      <div class="total-row">
+        <span class="total-label">Subtotal</span>
+        <span class="total-value">{{ cartService.subtotal() | currency: 'USD' }}</span>
+      </div>
+      <div class="total-row">
+        <span class="total-label">IGV (18%)</span>
+        <span class="total-value">{{ cartService.igv() | currency: 'USD' }}</span>
+      </div>
+      <div class="total-divider"></div>
+      <div class="total-row total-grand">
+        <span>Total</span>
+        <span class="grand-amount">{{ cartService.total() | currency: 'USD' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agregá esto justo antes del action-bar -->
+  <div class="error-msg" *ngIf="errorMsg()">⚠️ {{ errorMsg() }}</div>
+
+  <!-- Y en el success overlay, mostrá el número real -->
+  <div class="success-overlay" [class.visible]="confirmed()">
+    <div class="success-check">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="3" width="44" height="44">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    </div>
+    <h2 class="success-title">¡Pedido enviado!</h2>
+    <p class="success-order">Orden #{{ orderNumber() }}</p>
+    <p class="success-sub">
+      Tu orden fue registrada exitosamente. El cliente recibirá su pedido pronto.
+    </p>
+    <button class="success-reset" (click)="newOrder()">Nuevo pedido</button>
+  </div>
+
+  <!-- Action bar -->
+  <button
+    class="confirm-btn"
+    (click)="confirmOrder()"
+    [disabled]="isLoading()"
+    [class.loading]="isLoading()"
+  >
+    <svg
+      *ngIf="!isLoading()"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      stroke-width="2.5"
+      width="20"
+      height="20"
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+    {{ isLoading() ? 'Enviando...' : 'Confirmar Pedido' }}
+  </button>
+
+  <!-- Success overlay -->
+  <div class="success-overlay" [class.visible]="confirmed()">
+    <div class="success-check">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="3" width="44" height="44">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    </div>
+    <h2 class="success-title">¡Pedido enviado!</h2>
+    <p class="success-sub">
+      Tu orden fue registrada exitosamente. El cliente recibirá su pedido pronto.
+    </p>
+    <button class="success-reset" (click)="newOrder()">Nuevo pedido</button>
+  </div>
+</div>
