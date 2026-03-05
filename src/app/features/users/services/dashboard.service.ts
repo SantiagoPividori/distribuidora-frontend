@@ -1,21 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../../environments/environment.development';
+import { ClientModel } from '../../clients/models/client-model';
 
 export interface DashboardService {
   totalAmount: number;
   pendingCount: number;
-}
-
-export interface Client {
-  id?: number;
-  businessName: string;
-  firstName: string;
-  lastName: string;
-  address: string;
-  phoneNumber: string;
-  taxId: string;
 }
 
 @Injectable({
@@ -29,13 +20,13 @@ export class DashboardService {
     return this.http.get<DashboardService>(`${this.apiUrl}/stats/daily`);
   }
 
-  getTodayRoute(): Observable<Client[]> {
-    return this.http.get<Client[]>(`${this.apiUrl}/customers/today-route`);
+  getTodayRoute(): Observable<ClientModel[]> {
+    return this.http.get<ClientModel[]>(`${this.apiUrl}/customers/today-route`);
   }
 
-  saveClient(clientData: Client): Observable<Client> {
+  saveClient(clientData: ClientModel): Observable<ClientModel> {
     // Post recibe: (URL, Cuerpo de la petición)
-    return this.http.post<Client>(`${environment.apiBaseUrl}/clients`, clientData);
+    return this.http.post<ClientModel>(`${environment.apiBaseUrl}/clients`, clientData);
 
   }
 }
