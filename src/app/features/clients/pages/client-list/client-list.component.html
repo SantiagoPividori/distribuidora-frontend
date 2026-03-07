@@ -3,7 +3,8 @@
     <div class="search-wrap">
       <div class="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="#9ab4ae" stroke-width="2.5">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
         </svg>
         <input
           type="text"
@@ -16,7 +17,7 @@
       <!-- ── Botón nuevo cliente ── -->
       <button class="add-btn" (click)="openModal()" aria-label="Nuevo cliente">
         <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-          <path d="M12 5v14M5 12h14"/>
+          <path d="M12 5v14M5 12h14" />
         </svg>
       </button>
     </div>
@@ -58,76 +59,80 @@
       </span>
       <div class="client-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="#00a844" stroke-width="2.5">
-          <path d="M5 12h14m-7-7 7 7-7 7"/>
+          <path d="M5 12h14m-7-7 7 7-7 7" />
         </svg>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ══════════ MODAL NUEVO CLIENTE ══════════ -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()"></div>
+  <!-- ══════════ MODAL NUEVO CLIENTE ══════════ -->
+  <div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()"></div>
 
-<div class="modal" *ngIf="showModal">
-  <div class="modal-header">
-    <h2 class="modal-title">Nuevo Cliente</h2>
-    <button class="modal-close" (click)="closeModal()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <path d="M18 6 6 18M6 6l12 12"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="modal-body" [formGroup]="newClientForm">
-
-    <div class="form-group">
-      <label>Nombre del negocio *</label>
-      <input type="text" formControlName="businessName" placeholder="Ej: Supermercado El Sol"/>
-      <span class="field-error"
-        *ngIf="newClientForm.get('businessName')?.invalid && newClientForm.get('businessName')?.touched">
-        Campo obligatorio
-      </span>
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-header">
+      <h2 class="modal-title">Nuevo Cliente</h2>
+      <button class="modal-close" (click)="closeModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
     </div>
 
-    <div class="form-row">
+    <div class="modal-body" [formGroup]="newClientForm">
       <div class="form-group">
-        <label>Nombre</label>
-        <input type="text" formControlName="firstName" placeholder="Juan"/>
+        <label>Nombre del negocio *</label>
+        <input type="text" formControlName="businessName" placeholder="Ej: Supermercado El Sol" />
+        <span
+          class="field-error"
+          *ngIf="
+            newClientForm.get('businessName')?.invalid && newClientForm.get('businessName')?.touched
+          "
+        >
+          Campo obligatorio
+        </span>
       </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" formControlName="firstName" placeholder="Juan" />
+        </div>
+        <div class="form-group">
+          <label>Apellido</label>
+          <input type="text" formControlName="lastName" placeholder="Pérez" />
+        </div>
+      </div>
+
       <div class="form-group">
-        <label>Apellido</label>
-        <input type="text" formControlName="lastName" placeholder="Pérez"/>
+        <label>Dirección *</label>
+        <input type="text" formControlName="address" placeholder="Av. Los Álamos 123" />
+        <span
+          class="field-error"
+          *ngIf="newClientForm.get('address')?.invalid && newClientForm.get('address')?.touched"
+        >
+          Campo obligatorio
+        </span>
       </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="tel" formControlName="phoneNumber" placeholder="099 000 000" />
+        </div>
+        <div class="form-group">
+          <label>CUIT / CUIL</label>
+          <input type="text" formControlName="taxId" placeholder="20123456789" />
+        </div>
+      </div>
+
+      <div class="save-error" *ngIf="saveError">⚠️ {{ saveError }}</div>
     </div>
 
-    <div class="form-group">
-      <label>Dirección *</label>
-      <input type="text" formControlName="address" placeholder="Av. Los Álamos 123"/>
-      <span class="field-error"
-        *ngIf="newClientForm.get('address')?.invalid && newClientForm.get('address')?.touched">
-        Campo obligatorio
-      </span>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+      <button class="btn-save" (click)="saveClient()" [disabled]="isSaving">
+        {{ isSaving ? 'Guardando...' : 'Guardar cliente' }}
+      </button>
     </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Teléfono</label>
-        <input type="tel" formControlName="phoneNumber" placeholder="099 000 000"/>
-      </div>
-      <div class="form-group">
-        <label>RUC / NIT</label>
-        <input type="text" formControlName="taxId" placeholder="20123456789"/>
-      </div>
-    </div>
-
-    <div class="save-error" *ngIf="saveError">⚠️ {{ saveError }}</div>
-
-  </div>
-
-  <div class="modal-footer">
-    <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
-    <button class="btn-save" (click)="saveClient()" [disabled]="isSaving">
-      {{ isSaving ? 'Guardando...' : 'Guardar cliente' }}
-    </button>
   </div>
 </div>

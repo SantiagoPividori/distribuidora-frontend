@@ -10,8 +10,14 @@
   >
     <div class="search-wrap">
       <div class="search-box">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#9ab4ae" stroke-width="2.5" width="16" height="16">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ab4ae"
+          stroke-width="2.5"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
         </svg>
         <input
           type="text"
@@ -21,6 +27,12 @@
           aria-label="Buscar producto"
         />
       </div>
+        <!-- ── Botón nuevo producto ── -->
+        <button class="add-prod-btn" (click)="openModal()" aria-label="Nuevo producto">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        </button>
     </div>
   </app-top-bar>
 
@@ -62,14 +74,19 @@
         <div class="product-details">
           <p class="product-name">{{ product.name }}</p>
           <p class="product-sku">{{ product.description }} · {{ product.category }}</p>
-          <p class="product-price">
-            {{ product.price | currency:'USD' }} <span>/ unidad</span>
-          </p>
+          <p class="product-price">{{ product.price | currency: 'USD' }} <span>/ unidad</span></p>
         </div>
 
         <div class="in-cart-badge" *ngIf="cartService.isInCart(product.id)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#00a844" stroke-width="3" width="12" height="12">
-            <path d="M20 6 9 17l-5-5"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#00a844"
+            stroke-width="3"
+            width="12"
+            height="12"
+          >
+            <path d="M20 6 9 17l-5-5" />
           </svg>
           En carrito
         </div>
@@ -86,13 +103,27 @@
           class="add-btn"
           [class.updated]="cartService.isInCart(product.id)"
           (click)="addToCart(product)"
-          [attr.aria-label]="cartService.isInCart(product.id) ? 'Actualizar ' + product.name : 'Agregar ' + product.name"
+          [attr.aria-label]="
+            cartService.isInCart(product.id)
+              ? 'Actualizar ' + product.name
+              : 'Agregar ' + product.name
+          "
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="16" height="16">
-            <path *ngIf="!cartService.isInCart(product.id)" d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line *ngIf="!cartService.isInCart(product.id)" x1="3" y1="6" x2="21" y2="6"/>
-            <path *ngIf="!cartService.isInCart(product.id)" d="M16 10a4 4 0 0 1-8 0"/>
-            <path *ngIf="cartService.isInCart(product.id)" d="M20 6 9 17l-5-5"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2.5"
+            width="16"
+            height="16"
+          >
+            <path
+              *ngIf="!cartService.isInCart(product.id)"
+              d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"
+            />
+            <line *ngIf="!cartService.isInCart(product.id)" x1="3" y1="6" x2="21" y2="6" />
+            <path *ngIf="!cartService.isInCart(product.id)" d="M16 10a4 4 0 0 1-8 0" />
+            <path *ngIf="cartService.isInCart(product.id)" d="M20 6 9 17l-5-5" />
           </svg>
           {{ cartService.isInCart(product.id) ? 'Actualizar' : 'Agregar' }}
         </button>
@@ -104,20 +135,93 @@
   <div class="float-cart" [class.visible]="cartService.hasItems()" (click)="goToSummary()">
     <div class="float-cart-icon">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" width="20" height="20">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
       </svg>
     </div>
     <div class="float-cart-info">
-      <span class="float-items">{{ cartService.itemCount() }} producto{{ cartService.itemCount() !== 1 ? 's' : '' }}</span>
-      <span class="float-total">{{ cartService.total() | currency:'USD' }}</span>
+      <span class="float-items"
+        >{{ cartService.itemCount() }} producto{{ cartService.itemCount() !== 1 ? 's' : '' }}</span
+      >
+      <span class="float-total">{{ cartService.total() | currency: 'USD' }}</span>
     </div>
     <div class="float-cta">
       Ver orden
-      <svg viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2.5" width="16" height="16">
-        <path d="M5 12h14m-7-7 7 7-7 7"/>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#00c853"
+        stroke-width="2.5"
+        width="16"
+        height="16"
+      >
+        <path d="M5 12h14m-7-7 7 7-7 7" />
       </svg>
     </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL NUEVO PRODUCTO ══════════ -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="closeModal()"></div>
+
+<div class="modal" *ngIf="showModal">
+  <div class="modal-header">
+    <h2 class="modal-title">Nuevo Producto</h2>
+    <button class="modal-close" (click)="closeModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6 6 18M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal-body" [formGroup]="newProductForm">
+    <div class="form-group">
+      <label>Nombre del producto *</label>
+      <input type="text" formControlName="name" placeholder="Ej: Coca Cola 1.5L" />
+      <span
+        class="field-error"
+        *ngIf="newProductForm.get('name')?.invalid && newProductForm.get('name')?.touched"
+      >
+        Campo obligatorio
+      </span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Descripción</label>
+        <input type="text" formControlName="description" placeholder="-" />
+      </div>
+      <div class="form-group">
+        <label>Precio</label>
+        <input type="number" formControlName="price" placeholder="2000" />
+        <span
+          class="field-error"
+          *ngIf="newProductForm.get('price')?.invalid && newProductForm.get('price')?.touched"
+        >
+          Campo obligatorio
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Stock *</label>
+      <input type="text" formControlName="stock" placeholder="5" />
+      <span
+        class="field-error"
+        *ngIf="newProductForm.get('stock')?.invalid && newProductForm.get('stock')?.touched"
+      >
+        Campo obligatorio
+      </span>
+    </div>
+
+    <div class="save-error" *ngIf="saveError">⚠️ {{ saveError }}</div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+    <button class="btn-save" (click)="saveProduct()" [disabled]="isSaving">
+      {{ isSaving ? 'Guardando...' : 'Guardar producto' }}
+    </button>
   </div>
 </div>

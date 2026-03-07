@@ -23,7 +23,7 @@
   height: 48px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
-  svg { flex-shrink: 0; }
+  svg { width: 18px; height: 18px; flex-shrink: 0; }
 
   input {
     flex: 1;
@@ -191,6 +191,23 @@
   margin-top: 12px;
 }
 
+.add-prod-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.6);  // ← borde visible
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+
+  svg { width: 22px; height: 22px; }
+  &:active { background: rgba(255, 255, 255, 0.45); }
+}
+
 .qty-control {
   display: flex;
   align-items: center;
@@ -223,6 +240,7 @@
   font-weight: 700;
   color: #0d1f1b;
 }
+
 
 .add-btn {
   flex: 1;

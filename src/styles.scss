@@ -6,11 +6,17 @@
   padding: 0;
 }
 
+html {
+  overflow: hidden;
+}
+
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background: #0d1f1b;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 app-root {
@@ -20,5 +26,6 @@ app-root {
   min-height: 100vh;
   background: #f8fafb;
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
+  padding-bottom: 64px;
 }
