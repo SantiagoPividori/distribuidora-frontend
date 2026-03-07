@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TopBarComponent],
   templateUrl: './client-list.component.html',
   styleUrls: ['./client-list.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ClientListComponent implements OnInit {
   private readonly clientService = inject(ClientService);

@@ -19,6 +19,13 @@ export const routes: Routes = [
         .then(m => m.ProductListComponent)
   },
   {
+    path: 'orders',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/pages/order-list/order-list.component')
+        .then(m => m.OrderListComponent)
+  },
+  {
     path: 'summary',
     canActivate: [authGuard],
     loadComponent: () =>

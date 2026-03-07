@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UUID } from 'crypto';
-import { ProductModel, ProductUI, toProductUI } from '../models/product.model';
+import { ProductModel, ProductRequest, ProductUI, toProductUI } from '../models/product.model';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
@@ -24,8 +24,8 @@ export class ProductService {
   }
 
   // ── POST /api/products ───────────────────────────
-  create(payload: Partial<ProductModel>): Observable<ProductModel> {
-    return this.http.post<ProductModel>(this.baseUrl, payload);
+  createProduct(payload: Partial<ProductRequest>): Observable<ProductRequest> {
+    return this.http.post<ProductRequest>(this.baseUrl, payload);
   }
 
   // ── PUT /api/products/{id} ───────────────────────

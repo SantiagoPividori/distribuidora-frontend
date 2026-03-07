@@ -10,6 +10,13 @@ export interface ProductModel {
   stock: number;
 }
 
+export interface ProductRequest {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+}
+
 // ── UI extiende CartProduct ────────────────────────
 export interface ProductUI extends CartProduct {}
 
