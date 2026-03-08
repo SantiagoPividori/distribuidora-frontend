@@ -44,7 +44,7 @@ export class ClientListComponent implements OnInit {
 
   loadClients(): void {
     this.isLoading = true;
-    this.clients$ = this.clientService.listAllClientsUI()
+    this.clients$ = this.clientService.listAllClientsUI();
   }
 
   onSearch(query: string): void {
@@ -87,7 +87,7 @@ export class ClientListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error creando cliente', err);
-        this.saveError = 'No se pudo crear el cliente. Verificá los datos.';
+        this.saveError = 'No se pudo crear el cliente. Verifica los datos.';
         this.isSaving = false;
       },
     });
