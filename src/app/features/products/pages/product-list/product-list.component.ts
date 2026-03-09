@@ -20,8 +20,8 @@ export class ProductListComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
 
-  allProducts: ProductUI[] = [];
-  categories: string[] = [];
+  allProducts = signal<ProductUI[]>([]);
+  categories = signal<string[]>([]);
   activeCategory = signal('Todos');
   searchQuery = '';
   isLoading = false;
@@ -35,12 +35,12 @@ export class ProductListComponent implements OnInit {
     name: ['', [Validators.required]],
     description: [''],
     price: [0, [Validators.required, Validators.min(0)]],
-    stock: [0, [Validators.required, Validators.min(0)]]
+    stock: [0, [Validators.required, Validators.min(0)]],
   });
 
   filteredProducts = computed(() => {
     const cat = this.activeCategory();
-    return this.allProducts.filter((p) => {
+    return this.allProducts().filter((p) => {
       const matchCat = cat === 'Todos' || p.category === cat;
       const matchSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchCat && matchSearch;
@@ -59,9 +59,8 @@ export class ProductListComponent implements OnInit {
     this.isLoading = true;
     this.productService.listAllUI().subscribe({
       next: (data) => {
-        this.allProducts = data;
-        this.categories = this.productService.getCategories(data);
-        // seed qtyMap desde el carrito actual
+        this.allProducts.set(data);
+        this.categories.set(this.productService.getCategories(data));
         data.forEach((p) => {
           this.qtyMap[p.id as string] = this.cartService.getQuantity(p.id as string);
         });
@@ -101,7 +100,7 @@ export class ProductListComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error creando producto', err);
-        this.saveError = 'No se pudo crear el producto. Verificá los datos.';
+        this.saveError = 'No se pudo crear el producto. Verifica los datos.';
         this.isSaving = false;
       },
     });

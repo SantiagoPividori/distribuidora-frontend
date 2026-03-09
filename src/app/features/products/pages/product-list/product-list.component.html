@@ -40,7 +40,7 @@
     <!-- Category chips -->
     <div class="chip-row">
       <button
-        *ngFor="let cat of categories"
+        *ngFor="let cat of categories()"
         class="chip"
         [class.active]="activeCategory() === cat"
         (click)="setCategory(cat)"
