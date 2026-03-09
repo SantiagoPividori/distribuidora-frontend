@@ -56,8 +56,7 @@ export class ClientListComponent implements OnInit {
   }
 
   selectClient(client: ClientUI): void {
-    this.cartService.setClient(client);
-    this.router.navigate(['/products']);
+    this.router.navigate(['/orders/client', client.id]);
   }
 
   openModal(): void {

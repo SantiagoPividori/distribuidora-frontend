@@ -16,6 +16,17 @@ export interface OrderRequest {
   items: OrderItemRequest[];
 }
 
+export interface OrderResponse {
+  id: UUID;
+  orderNumber: number;
+  clientBusinessName: string;
+  clientId: string;
+  createdAt: string;
+  totalAmount: number;
+  status: OrderStatus;
+  itemCount: number;
+}
+
 // ── Response (lo que devuelve el backend) ──────────
 export interface OrderItemResponse {
   id: UUID;
