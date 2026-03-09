@@ -7,7 +7,6 @@ import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiBaseUrl}/orders`;
 
@@ -30,5 +29,9 @@ export class OrderService {
   // ── PATCH /api/orders/{id}/cancel ────────────────
   cancelOrder(id: UUID): Observable<OrderResponse> {
     return this.http.patch<OrderResponse>(`${this.baseUrl}/${id}/cancel`, {});
+  }
+
+  getOrdersByClient(clientId: string): Observable<OrderResponse[]> {
+    return this.http.get<OrderResponse[]>(`${this.baseUrl}/clients/${clientId}`);
   }
 }
