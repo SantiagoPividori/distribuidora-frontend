@@ -1,1 +1,53 @@
-<p>order-list works!</p>
+<div class="screen">
+  <app-top-bar
+    [title]="client()?.businessName ?? 'Órdenes'"
+    subtitle="Historial de pedidos"
+    [showBack]="true"
+    (backClick)="router.navigate(['/clients'])"
+  >
+  </app-top-bar>
+
+  <div class="content">
+    <div *ngIf="isLoading()" class="empty-state">
+      <span class="empty-icon">⏳</span>
+      <p class="empty-title">Cargando...</p>
+    </div>
+
+    <div *ngIf="!isLoading() && orders().length === 0" class="empty-state">
+      <span class="empty-icon">📋</span>
+      <p class="empty-title">Sin órdenes</p>
+      <p class="empty-sub">Este cliente no tiene pedidos aún</p>
+    </div>
+
+    <div class="section-header" *ngIf="!isLoading() && orders().length > 0">
+      <span class="section-title">Pedidos</span>
+      <span class="section-count">{{ orders().length }}</span>
+    </div>
+
+    <div *ngFor="let order of orders(); trackBy: trackById" class="order-card">
+      <div class="order-left">
+        <div class="order-number">#{{ order.orderNumber }}</div>
+        <div class="order-meta">
+          <span class="order-date">{{ formatDate(order.createdAt) }}</span>
+          <span class="order-items"
+            >{{ order.itemCount }} producto{{ order.itemCount !== 1 ? 's' : '' }}</span
+          >
+        </div>
+      </div>
+      <div class="order-right">
+        <span class="order-amount">${{ order.totalAmount | number: '1.2-2' }}</span>
+        <span class="order-status" [class]="'status-' + order.status.toLowerCase()">
+          {{ statusLabel(order.status) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAB nueva orden -->
+  <button class="fab" (click)="newOrder()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+    <span>Nueva orden</span>
+  </button>
+</div>
