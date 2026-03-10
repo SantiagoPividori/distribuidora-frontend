@@ -52,6 +52,15 @@ export const routes: Routes = [
       ),
   },
 
+  {
+    path: 'orders/:orderId',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/pages/order-detail/order-detail.component').then(
+        (m) => m.OrderDetailComponent,
+      ),
+  },
+
   //Redirects
   { path: '', pathMatch: 'full', redirectTo: 'auth/login' },
   { path: '**', redirectTo: 'auth/login' },
