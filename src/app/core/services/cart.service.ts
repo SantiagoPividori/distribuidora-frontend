@@ -1,28 +1,24 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { ClientUI } from '../../features/clients/models/client-model';
-import { CartItem } from './cart.model';                                          
-import { ProductUI } from '../../features/products/models/product.model';        
+import { CartItem } from './cart.model';
+import { ProductUI } from '../../features/products/models/product.model';
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-
   readonly selectedClient = signal<ClientUI | null>(null);
   private readonly _cart = signal<Map<string, CartItem>>(new Map());
 
-  readonly cartItems = computed<CartItem[]>(() =>
-    Array.from(this._cart().values())
-  );
+  readonly cartItems = computed<CartItem[]>(() => Array.from(this._cart().values()));
 
   readonly itemCount = computed<number>(() =>
-    this.cartItems().reduce((sum, i) => sum + i.quantity, 0)
+    this.cartItems().reduce((sum, i) => sum + i.quantity, 0),
   );
 
   readonly subtotal = computed<number>(() =>
-    this.cartItems().reduce((sum, i) => sum + i.product.price * i.quantity, 0)
+    this.cartItems().reduce((sum, i) => sum + i.product.price * i.quantity, 0),
   );
 
-  readonly igv      = computed<number>(() => this.subtotal() * 0.18);
-  readonly total    = computed<number>(() => this.subtotal() + this.igv());
+  readonly total = computed<number>(() => this.subtotal());
   readonly hasItems = computed<boolean>(() => this._cart().size > 0);
 
   setClient(client: ClientUI): void {
