@@ -1,0 +1,61 @@
+<div class="screen">
+  <app-top-bar
+    [title]="order() ? '#' + order()!.orderNumber : 'Detalle'"
+    subtitle="Detalle de la orden"
+    [showBack]="true"
+    (backClick)="router.navigate(['/clients'])"
+  >
+  </app-top-bar>
+
+  <div class="content">
+    <div *ngIf="isLoading()" class="empty-state">
+      <span class="empty-icon">⏳</span>
+      <p class="empty-title">Cargando...</p>
+    </div>
+
+    <ng-container *ngIf="!isLoading() && order() as o">
+      <!-- Info card -->
+      <div class="info-card">
+        <div class="info-row">
+          <span class="info-label">Cliente</span>
+          <span class="info-value">{{ o.clientBusinessName }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Fecha</span>
+          <span class="info-value">{{ formatDate(o.createdAt) }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Estado</span>
+          <span class="order-status" [class]="'status-' + o.status.toLowerCase()">
+            {{ statusLabel(o.status) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="section-header">
+        <span class="section-title">Productos</span>
+        <span class="section-count">{{ o.items.length }}</span>
+      </div>
+
+      <div class="item-card" *ngFor="let item of o.items">
+        <div class="item-info">
+          <p class="item-name">{{ item.productName }}</p>
+          <p class="item-qty">
+            {{ item.quantity }} unidad{{ item.quantity !== 1 ? 'es' : '' }} · ${{
+              item.unitPrice | number: '1.2-2'
+            }}
+            c/u
+          </p>
+        </div>
+        <span class="item-subtotal">${{ item.subtotal | number: '1.2-2' }}</span>
+      </div>
+
+      <!-- Total -->
+      <div class="total-card">
+        <span class="total-label">Total</span>
+        <span class="total-amount">${{ o.totalAmount | number: '1.2-2' }}</span>
+      </div>
+    </ng-container>
+  </div>
+</div>
