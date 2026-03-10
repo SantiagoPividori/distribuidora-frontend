@@ -31,8 +31,8 @@ export const routes: Routes = [
     path: 'orders',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/orders/pages/order-list/order-list.component').then(
-        (m) => m.OrderListComponent,
+      import('./features/orders/pages/orders-overview/orders-overview.component').then(
+        (m) => m.OrdersOverviewComponent,
       ),
   },
   {
@@ -49,6 +49,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/orders/pages/order-list/order-list.component').then(
         (m) => m.OrderListComponent,
+      ),
+  },
+
+  {
+    path: 'orders/:orderId',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/orders/pages/order-detail/order-detail.component').then(
+        (m) => m.OrderDetailComponent,
       ),
   },
 

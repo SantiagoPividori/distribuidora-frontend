@@ -20,11 +20,30 @@ export interface OrderResponse {
   id: UUID;
   orderNumber: number;
   clientBusinessName: string;
-  clientId: string;
+  clientId: UUID;
   createdAt: string;
   totalAmount: number;
   status: OrderStatus;
   itemCount: number;
+}
+
+export interface OrderItemResponse {
+  id: UUID;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+}
+
+export interface OrderDetailResponse {
+  id: UUID;
+  orderNumber: number;
+  clientBusinessName: string;
+  clientId: UUID;
+  createdAt: string;
+  totalAmount: number;
+  status: OrderStatus;
+  items: OrderItemResponse[];
 }
 
 // ── Response (lo que devuelve el backend) ──────────
