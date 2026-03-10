@@ -1,0 +1,44 @@
+<div class="screen">
+  <app-top-bar title="Mis Órdenes" subtitle="Historial completo"> </app-top-bar>
+
+  <div class="content">
+    <div *ngIf="isLoading()" class="empty-state">
+      <span class="empty-icon">⏳</span>
+      <p class="empty-title">Cargando...</p>
+    </div>
+
+    <div *ngIf="!isLoading() && orders().length === 0" class="empty-state">
+      <span class="empty-icon">📋</span>
+      <p class="empty-title">Sin órdenes</p>
+      <p class="empty-sub">No tenés pedidos registrados aún</p>
+    </div>
+
+    <div class="section-header" *ngIf="!isLoading() && orders().length > 0">
+      <span class="section-title">Órdenes</span>
+      <span class="section-count">{{ orders().length }}</span>
+    </div>
+
+    <div
+      *ngFor="let order of orders(); trackBy: trackById"
+      class="order-card"
+      (click)="openOrder(order)"
+    >
+      <div class="order-left">
+        <div class="order-number">#{{ order.orderNumber }}</div>
+        <div class="order-meta">
+          <span class="order-client">{{ order.clientBusinessName }}</span>
+          <span class="order-date">{{ formatDate(order.createdAt) }}</span>
+          <span class="order-items">
+            {{ order.itemCount }} producto{{ order.itemCount !== 1 ? 's' : '' }}
+          </span>
+        </div>
+      </div>
+      <div class="order-right">
+        <span class="order-amount">${{ order.totalAmount | number: '1.2-2' }}</span>
+        <span class="order-status" [class]="'status-' + order.status.toLowerCase()">
+          {{ statusLabel(order.status) }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
