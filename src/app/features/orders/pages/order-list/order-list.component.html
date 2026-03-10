@@ -24,7 +24,11 @@
       <span class="section-count">{{ orders().length }}</span>
     </div>
 
-    <div *ngFor="let order of orders(); trackBy: trackById" class="order-card">
+    <div
+      *ngFor="let order of orders(); trackBy: trackById"
+      class="order-card"
+      (click)="openOrder(order.id)"
+    >
       <div class="order-left">
         <div class="order-number">#{{ order.orderNumber }}</div>
         <div class="order-meta">

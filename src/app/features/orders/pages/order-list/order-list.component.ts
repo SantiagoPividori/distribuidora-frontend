@@ -74,4 +74,8 @@ export class OrderListComponent implements OnInit {
     const d = new Date(dateStr);
     return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
   }
+
+  openOrder(orderId: string): void {
+    this.router.navigate(['/orders', orderId]);
+  }
 }
