@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UUID } from 'crypto';
-import { OrderRequest, OrderResponse } from '../models/order.model';
+import { OrderDetailResponse, OrderRequest, OrderResponse } from '../models/order.model';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
@@ -33,5 +33,9 @@ export class OrderService {
 
   getOrdersByClient(clientId: string): Observable<OrderResponse[]> {
     return this.http.get<OrderResponse[]>(`${this.baseUrl}/clients/${clientId}`);
+  }
+
+  getOrderById(id: string): Observable<OrderDetailResponse> {
+    return this.http.get<OrderDetailResponse>(`${this.baseUrl}/${id}`);
   }
 }
