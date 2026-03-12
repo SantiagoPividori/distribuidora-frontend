@@ -1,25 +1,67 @@
 <div class="screen">
   <app-top-bar title="Mis Órdenes" subtitle="Historial completo"> </app-top-bar>
 
+  <!-- Filtros rápidos -->
+  <div class="filter-bar">
+    <div class="chip-row">
+      <button
+        class="chip"
+        [class.active]="activeFilter() === 'all'"
+        (click)="setQuickFilter('all')"
+      >
+        Todos
+      </button>
+      <button
+        class="chip"
+        [class.active]="activeFilter() === 'today'"
+        (click)="setQuickFilter('today')"
+      >
+        Hoy
+      </button>
+      <button
+        class="chip"
+        [class.active]="activeFilter() === 'week'"
+        (click)="setQuickFilter('week')"
+      >
+        Esta semana
+      </button>
+      <button
+        class="chip"
+        [class.active]="activeFilter() === 'month'"
+        (click)="setQuickFilter('month')"
+      >
+        Este mes
+      </button>
+    </div>
+
+    <!-- Date picker -->
+    <input
+      type="date"
+      class="date-input"
+      [value]="selectedDate() || ''"
+      (change)="onDateChange($event)"
+    />
+  </div>
+
   <div class="content">
     <div *ngIf="isLoading()" class="empty-state">
       <span class="empty-icon">⏳</span>
       <p class="empty-title">Cargando...</p>
     </div>
 
-    <div *ngIf="!isLoading() && orders().length === 0" class="empty-state">
+    <div *ngIf="!isLoading() && ordersFiltered().length === 0" class="empty-state">
       <span class="empty-icon">📋</span>
       <p class="empty-title">Sin órdenes</p>
-      <p class="empty-sub">No tenés pedidos registrados aún</p>
+      <p class="empty-sub">No tenes pedidos registrados aún</p>
     </div>
 
-    <div class="section-header" *ngIf="!isLoading() && orders().length > 0">
+    <div class="section-header" *ngIf="!isLoading() && ordersFiltered().length > 0">
       <span class="section-title">Órdenes</span>
-      <span class="section-count">{{ orders().length }}</span>
+      <span class="section-count">{{ ordersFiltered().length }}</span>
     </div>
 
     <div
-      *ngFor="let order of orders(); trackBy: trackById"
+      *ngFor="let order of ordersFiltered(); trackBy: trackById"
       class="order-card"
       (click)="openOrder(order)"
     >

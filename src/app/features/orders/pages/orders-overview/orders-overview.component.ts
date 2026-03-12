@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { TopBarComponent } from '../../../../components/shared/top-bar/top-bar.component';
@@ -18,19 +18,8 @@ export class OrdersOverviewComponent implements OnInit {
 
   orders = signal<OrderResponse[]>([]);
   isLoading = signal(true);
-
-  ngOnInit(): void {
-    this.orderService.getMyOrders().subscribe({
-      next: (data) => {
-        this.orders.set(data);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('Error cargando órdenes', err);
-        this.isLoading.set(false);
-      },
-    });
-  }
+  selectedDate = signal<string | null>(null);
+  activeFilter = signal<'all' | 'today' | 'week' | 'month'>('all');
 
   openOrder(order: OrderResponse): void {
     this.router.navigate(['/orders', order.id]);
@@ -53,4 +42,64 @@ export class OrdersOverviewComponent implements OnInit {
     const d = new Date(dateStr);
     return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
   }
+
+  loadOrders(date?: string): void {
+    this.isLoading.set(true);
+    this.orderService.getMyOrders(date).subscribe({
+      next: (data) => {
+        this.orders.set(data);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading.set(false);
+      },
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadOrders();
+  }
+
+  setQuickFilter(filter: 'all' | 'today' | 'week' | 'month'): void {
+    this.activeFilter.set(filter);
+    this.selectedDate.set(null);
+
+    const today = new Date();
+    const fmt = (d: Date) => d.toISOString().split('T')[0];
+
+    if (filter === 'today') {
+      this.loadOrders(fmt(today));
+    } else {
+      this.loadOrders(); // all, week y month los filtramos en frontend
+    }
+  }
+
+  onDateChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.selectedDate.set(value);
+    this.activeFilter.set('all');
+    this.loadOrders(value || undefined);
+  }
+
+  ordersFiltered = computed(() => {
+    const orders = this.orders();
+    const filter = this.activeFilter();
+
+    if (filter === 'all' || filter === 'today') return orders;
+
+    const now = new Date();
+    return orders.filter((o) => {
+      const date = new Date(o.createdAt);
+      if (filter === 'week') {
+        const weekAgo = new Date(now);
+        weekAgo.setDate(now.getDate() - 7);
+        return date >= weekAgo;
+      }
+      if (filter === 'month') {
+        return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+      }
+      return true;
+    });
+  });
 }
