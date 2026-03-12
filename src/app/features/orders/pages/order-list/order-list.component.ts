@@ -63,9 +63,8 @@ export class OrderListComponent implements OnInit {
   statusLabel(status: string): string {
     const map: Record<string, string> = {
       PENDING: 'Pendiente',
-      CONFIRMED: 'Confirmada',
+      COMPLETED: 'Completada',
       CANCELLED: 'Cancelada',
-      DELIVERED: 'Entregada',
     };
     return map[status] ?? status;
   }

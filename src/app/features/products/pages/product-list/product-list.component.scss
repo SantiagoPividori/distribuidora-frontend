@@ -1,9 +1,10 @@
 .screen {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   background: #f8fafb;
   position: relative;
+  overflow: hidden;
 }
 
 .search-wrap {
@@ -48,7 +49,7 @@
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
