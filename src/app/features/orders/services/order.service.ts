@@ -38,4 +38,11 @@ export class OrderService {
   getOrderById(id: string): Observable<OrderDetailResponse> {
     return this.http.get<OrderDetailResponse>(`${this.baseUrl}/${id}`);
   }
+
+  updateOrderStatus(
+    id: string,
+    status: 'PENDING' | 'COMPLETED' | 'CANCELLED',
+  ): Observable<OrderResponse> {
+    return this.http.patch<OrderResponse>(`${this.baseUrl}/${id}/status`, { status } );
+  }
 }
