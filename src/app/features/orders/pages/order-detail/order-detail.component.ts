@@ -37,9 +37,8 @@ export class OrderDetailComponent implements OnInit {
   statusLabel(status: string): string {
     const map: Record<string, string> = {
       PENDING: 'Pendiente',
-      CONFIRMED: 'Confirmada',
+      COMPLETED: 'Completada',
       CANCELLED: 'Cancelada',
-      DELIVERED: 'Entregada',
     };
     return map[status] ?? status;
   }
@@ -52,6 +51,16 @@ export class OrderDetailComponent implements OnInit {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
+    });
+  }
+
+  updateStatus(status: 'PENDING' | 'COMPLETED' | 'CANCELLED'): void {
+    const id = this.route.snapshot.paramMap.get('orderId') ?? '';
+    this.orderService.updateOrderStatus(id, status).subscribe({
+      next: (updated) => {
+        this.order.update((o) => (o ? { ...o, status: updated.status } : o));
+      },
+      error: (err) => console.error('Error actualizando estado', err),
     });
   }
 }
