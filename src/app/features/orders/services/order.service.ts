@@ -43,6 +43,6 @@ export class OrderService {
     id: string,
     status: 'PENDING' | 'COMPLETED' | 'CANCELLED',
   ): Observable<OrderResponse> {
-    return this.http.patch<OrderResponse>(`${this.baseUrl}/${id}/status`, { status } );
+    return this.http.patch<OrderResponse>(`${this.baseUrl}/${id}/status`, { status });
   }
 }
